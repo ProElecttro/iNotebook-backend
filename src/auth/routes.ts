@@ -1,6 +1,7 @@
 import { check, ValidationChain } from 'express-validator';
 import { Router } from "express";
 import { controller } from "./controller";
+import fetchuser from '../middleware/fetchuser';
 
 const authRoutes = Router();
 
@@ -13,5 +14,6 @@ const validationRules: ValidationChain[] = [
 
 authRoutes.post('/login', validationRules, controller.login);
 authRoutes.post('/signup', validationRules, controller.signup);
+authRoutes.get('/getuser', fetchuser, controller.getuserData);
 
 export default authRoutes;

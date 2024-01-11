@@ -1,13 +1,18 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm"
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm"
+import { Note } from "./notes"
 
-@Entity({name: "User"})
+// User entity
+@Entity({ name: "User" })
 export class User {
     @PrimaryGeneratedColumn("uuid")
-    user_id: string
+    user_id: string;
 
     @Column()
-    email!: string
+    email!: string;
 
     @Column()
-    password!: string
+    password!: string;
+
+    @OneToMany(type => Note, note => note.user)
+    notes: Note[];
 }

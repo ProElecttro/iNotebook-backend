@@ -5,12 +5,13 @@ import { AppDataSource } from "./config";
 import authRoutes from "./auth/routes";
 
 import express from 'express'
+import notesRoutes from "./notes/routes";
+
 const app = express();
 app.use(express.json())
 
 app.use("/api/v1/auth", authRoutes);
-
-
+app.use("/api/v1/notes", notesRoutes);
 
 const port = 4000;
 
