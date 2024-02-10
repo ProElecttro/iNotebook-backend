@@ -14,6 +14,5 @@ const validationRules: ValidationChain[] = [
 
 authRoutes.post('/login', validationRules, controller.login);
 authRoutes.post('/signup', validationRules, controller.signup);
-authRoutes.get('/getuser', fetchuser, controller.getuserData);
 
 export default authRoutes;

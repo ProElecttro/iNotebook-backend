@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique } from "typeorm"
 import { User } from "./user"
 
 // Note entity
 @Entity({ name: "Note" })
 export class Note {
     @PrimaryGeneratedColumn("uuid")
-    notes_id: string; // Change the type to string
+    notes_id: string;
 
     @Column()
     title: string;
@@ -14,7 +14,7 @@ export class Note {
     tags: string;
 
     @Column()
-    text: string;
+    description: string;
 
     @ManyToOne(type => User, user => user.notes)
     user: User;

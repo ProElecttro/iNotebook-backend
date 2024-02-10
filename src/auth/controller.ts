@@ -10,11 +10,9 @@ dotenv.config()
 
 const userRepo = AppDataSource.getRepository(User);
 
-const login = async (req:any, res:any) => {
-    return res.send("Login route");
-}
+const login = async (req: any, res: any) => {
+    let success = false;
 
-const signup = async (req:any, res:any) => {
     const result = validationResult(req);
     if (!result.isEmpty()) {
         return res.status(400).send({ errors: result.array() });
@@ -24,14 +22,53 @@ const signup = async (req:any, res:any) => {
         where: { email: req.body.email }
     })
 
-    if( user ){
+    if (!user) {
+        return res.status(400).send({ error: "User not found, please register" })
+    }
+
+    const matchPassword = bcrypt.compare(user.password, req.body.password)
+
+    if (!matchPassword) {
+        res.status(400).send({ error: "Invalid Credentials" })
+    }
+
+    try {
+
+        const payload = {
+            user: {
+                id: user.user_id,
+            }
+        }
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
+
+        success = true
+        res.status(200).json({ success, token })
+    } catch (error) {
+        res.status(400).json({ success, error })
+    }
+}
+
+const signup = async (req: any, res: any) => {
+    let success = false
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.status(400).send({ errors: result.array() });
+    }
+
+    const user = await userRepo.findOne({
+        where: { email: req.body.email }
+    })
+
+    if (user) {
         return res.status(400).send({ error: "User already exist, please login" })
     }
 
     try {
         let user = new User()
 
-        user = {...req.body}
+        user = { ...req.body }
         user.password = await bcrypt.hash(user.password, 12)
         const savedUser = await userRepo.save(user)
 
@@ -42,31 +79,15 @@ const signup = async (req:any, res:any) => {
         }
 
         const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "2h" });
-        res.status(200).json({ token })
+        success = true;
+
+        res.status(200).json({ success, token })
     } catch (error) {
-        res.status(400).json({ error: error})
+        res.status(400).json({ success, error })
     }
 }
-
-const getuserData = async (req: any, res: any) => {
-    const user_id = req.user.id;
-
-    try {
-        const user = await userRepo.findOne({
-            where: { user_id: user_id },
-            select: ["email", "user_id"],
-        });
-
-        res.status(200).json({ user });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
-
 
 export const controller = {
     login,
     signup,
-    getuserData
 }

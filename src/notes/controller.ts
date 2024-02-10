@@ -11,9 +11,7 @@ const addNotes = async(req:any, res:any) => {
     let note = new Note()
     req.user.id = user_id
 
-
     note = {...req.body}
-    note.tags = JSON.stringify(req.body.tags)
 
     const user = await userRepo.findOne({
         where: { user_id: user_id },
@@ -62,9 +60,9 @@ const updateNote = async (req: any, res: any) => {
         }
 
         const newNote = new Note();
-        newNote.text = req.body.text || note.text;
+        newNote.description = req.body.description || note.description;
         newNote.title = req.body.title || note.title;
-        newNote.tags = JSON.stringify([...JSON.parse(note.tags), ...JSON.parse(req.body.tags)]);
+        newNote.tags = req.body.tags;
 
         await notesRepo.update(note.notes_id, newNote);
 
