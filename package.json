@@ -6,7 +6,8 @@
     "start:dev": "nodemon ./src/app.ts",
     "start:prod": "node ./dist/app.js",
     "build": "tsc -p .",
-    "both": "concurrently \"cd ../frontend && npm run start\" \"npm run start:dev\" "
+    "both": "concurrently \"cd ../frontend && npm run start\" \"npm run start:dev\" ",
+    "vercel-build": "echo hello"
   },
   "author": "",
   "license": "ISC",
