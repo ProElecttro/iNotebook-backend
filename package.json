@@ -5,9 +5,9 @@
   "scripts": {
     "start:dev": "nodemon ./src/app.ts",
     "start:prod": "node ./dist/app.js",
-    "build": "tsc -p .",
+    "build": "",
     "both": "concurrently \"cd ../frontend && npm run start\" \"npm run start:dev\" ",
-    "vercel-build": "echo hello"
+    "vercel-build": "tsc -p ."
   },
   "author": "",
   "license": "ISC",
