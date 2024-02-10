@@ -21,7 +21,7 @@ app.use("/api/v1/notes", notesRoutes);
 const port = 4000;
 
 AppDataSource.initialize().then(() => {
-    app.listen(port, () => {
+    app.listen(port, '0.0.0.0' , () => {
         console.log(`listening on ${port}`)
     });
 }).catch((error) => {
